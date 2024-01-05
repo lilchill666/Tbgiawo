@@ -26,4 +26,7 @@ class MenuPresenterImpl(
     override fun onExitButtonClicked() {
         fragment.finish()
     }
+    override fun onSettingsButtonClicked(){
+        fragment.navigateToSettings()
+    }
 }

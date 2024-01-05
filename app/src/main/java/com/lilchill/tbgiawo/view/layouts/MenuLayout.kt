@@ -16,6 +16,7 @@ class MenuLayout(context: Context) : FrameLayout(context) {
     val startOnlineButton = FrameLayout(context)
     val finishButton = FrameLayout(context)
     val wins = TextView(context)
+    val settings = ImageView(context)
     init {
         background = AppCompatResources.getDrawable(context, R.drawable.background)
         setupButtons()
@@ -58,6 +59,18 @@ class MenuLayout(context: Context) : FrameLayout(context) {
             ).apply {
                 gravity = Gravity.TOP or Gravity.END
                 setPadding(0, (12F * resources.displayMetrics.density).toInt(), (30F * resources.displayMetrics.density).toInt(), 0)
+            }
+        )
+        addView(
+            settings.apply{
+                this.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.settings))
+            },
+            LayoutParams(
+                (85F * resources.displayMetrics.density).toInt(),
+                (85F * resources.displayMetrics.density).toInt()
+            ).apply {
+                this.gravity = Gravity.TOP or Gravity.START
+                this.setMargins((30F * resources.displayMetrics.density).toInt(), (12F * resources.displayMetrics.density).toInt(), 0, 0)
             }
         )
     }
@@ -138,7 +151,7 @@ class MenuLayout(context: Context) : FrameLayout(context) {
             )
         }
     }
-    private fun setupWins(){
+    private fun setupWins() {
         wins.gravity = Gravity.CENTER
         wins.textAlignment = TEXT_ALIGNMENT_CENTER
         wins.textSize = 50F

@@ -6,14 +6,9 @@ import com.lilchill.tbgiawo.view.interfaces.GameViewInterface
 class OnlineGamePresenterImpl(
     private val fragment: GameViewInterface
 ) : GamePresenter {
-    override fun onPlayerOneMove() {
+    override fun onFieldClicked() {
         TODO("Not yet implemented")
     }
-
-    override fun onPlayerTwoMove() {
-        TODO("Not yet implemented")
-    }
-
     override fun onPlayerOneWin() {
         TODO("Not yet implemented")
     }
@@ -25,5 +20,11 @@ class OnlineGamePresenterImpl(
     override fun onTie() {
         TODO("Not yet implemented")
     }
+    override fun onLeftClicked() {
+        fragment.movePointerLeft()
+    }
 
+    override fun onRightClicked() {
+        fragment.movePointerRight()
+    }
 }

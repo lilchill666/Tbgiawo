@@ -24,6 +24,10 @@ class MenuFragment : Fragment(), MenuViewInterface {
         (requireActivity() as AppActivity).supportFragmentManager.beginTransaction().replace(R.id.root, GameFragment()).commit()
     }
 
+    override fun navigateToSettings() {
+        (requireActivity() as AppActivity).supportFragmentManager.beginTransaction().replace(R.id.root, SettingsFragment()).commit()
+    }
+
     override fun updateTheNumberOfWins(number: Int) {
         layout.wins.text = resources.getString(R.string.winsMenuText, number)
     }
@@ -61,6 +65,9 @@ class MenuFragment : Fragment(), MenuViewInterface {
         }
         layout.startOnlineButton.setOnClickListener{
             presenter.onPlayOnlineButtonClicked()
+        }
+        layout.settings.setOnClickListener{
+            presenter.onSettingsButtonClicked()
         }
         layout.finishButton.setOnClickListener{
             presenter.onExitButtonClicked()

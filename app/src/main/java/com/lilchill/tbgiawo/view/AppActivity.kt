@@ -14,7 +14,8 @@ import com.lilchill.tbgiawo.view.fragments.MenuFragment
 import com.tencent.mmkv.MMKV
 
 //splash
-//column pointer
+//settings
+//preferred colors (generation)
 //falling animation (translationY end point should be calculated in GameField class by finding first untaken + margin)
 //match checker
 //arrows (game style(ask Lera))

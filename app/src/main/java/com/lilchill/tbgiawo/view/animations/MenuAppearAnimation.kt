@@ -13,6 +13,9 @@ object MenuAppearAnimation {
         startOnlineButton.translationX = if (Random().nextBoolean()) startLocallyButton.right.toFloat() else (-startLocallyButton.right).toFloat()
         startLocallyButton.translationY = -startLocallyButton.bottom.toFloat()
         finishButton.translationY = finishButton.top.toFloat()
+        settings.alpha = 0F
+        settings.scaleX = 0F
+        settings.scaleY = 0F
         wins.alpha = 0F
         wins.scaleX = 0F
         wins.scaleY = 0F
@@ -26,7 +29,14 @@ object MenuAppearAnimation {
                         ObjectAnimator.ofFloat(finishButton, View.TRANSLATION_Y, finishButton.translationY, 0F),
                         ObjectAnimator.ofFloat(startOnlineButton, View.ALPHA, 0F, 1F),
                         ObjectAnimator.ofFloat(startLocallyButton, View.ALPHA, 0F, 1F),
-                        ObjectAnimator.ofFloat(finishButton, View.ALPHA, 0F, 1F)
+                        ObjectAnimator.ofFloat(finishButton, View.ALPHA, 0F, 1F),
+                        ValueAnimator.ofFloat(0F, 1F).apply {
+                            addUpdateListener {
+                                settings.scaleY = it.animatedValue as Float
+                                settings.scaleX = it.animatedValue as Float
+                                settings.alpha = it.animatedValue as Float
+                            }
+                        }
                     )
                 },
                 ValueAnimator.ofFloat(0F, 1F).apply {
