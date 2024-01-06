@@ -4,4 +4,11 @@
     <string name="onlineMenuButton">Online</string>
     <string name="exitMenuButton">Exit</string>
     <string name="winsMenuText">Wins: %1$d</string>
+    <string name="firstPlayerText">Choose who moves first</string>
+    <string name="firstPlayerColorText">Player 1 color</string>
+    <string name="secondPlayerColorText">Player 2 color</string>
+    <string name="buttonText">Start</string>
+    <string name="firstPlayerOption">Player 1</string>
+    <string name="secondPlayerOption">Player 2</string>
+    <string name="randomPlayerOption">Random</string>
 </resources>

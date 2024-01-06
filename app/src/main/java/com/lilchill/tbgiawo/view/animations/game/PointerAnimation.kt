@@ -12,6 +12,7 @@ import androidx.core.animation.doOnStart
 import androidx.lifecycle.lifecycleScope
 import com.lilchill.tbgiawo.view.AppActivity
 import com.lilchill.tbgiawo.view.animations.game.PointerAnimation.animateMove
+import com.lilchill.tbgiawo.view.fragments.GameFragment
 import com.lilchill.tbgiawo.view.layouts.views.GamePointer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -23,6 +24,7 @@ object PointerAnimation {
     private var listOfAnimations = mutableListOf<Animator>()
     private var animation = AnimatorSet()
     private var checkingCoroutine : Job? = null
+    val animationIsRunning get() = animation.isRunning
     var listOfPositions = listOf<Float>()
     fun GamePointer.animateMove(oldPosition : Int, newPosition : Int){
         listOfAnimations.add(
@@ -52,7 +54,7 @@ object PointerAnimation {
             }
         )
         if (this@PointerAnimation.animation.isStarted){
-            checkingCoroutine = (context as AppActivity).lifecycleScope.launch(Dispatchers.IO) {
+            checkingCoroutine = ((context as AppActivity).supportFragmentManager.fragments.last() as GameFragment).lifecycleScope.launch(Dispatchers.IO) {
                 do {
                     Unit
                 } while (listOfPositions.find { it == this@animateMove.translationX } != null)
@@ -69,6 +71,60 @@ object PointerAnimation {
                 playSequentially(listOfAnimations)
                 start()
             }
+        }
+    }
+    fun GamePointer.animateDrop(translationY : Float, endAction : () -> Unit){
+        val bounceHeight = ((if (translationY == listOfPositions[4]) 4 else 16)..(if (translationY == listOfPositions[4]) 8 else 23)).random().toFloat()
+        AnimatorSet().apply {
+            playSequentially(
+                ValueAnimator.ofFloat(0.3F, 0.15F).apply {
+                    duration = 220
+                    this.addUpdateListener {
+                        this@animateDrop.scaleY = it.animatedValue as Float
+                        this@animateDrop.scaleX = it.animatedValue as Float
+                    }
+                },
+                ValueAnimator.ofFloat(0.15F, 0.9F).apply {
+                    duration = 150
+                    this.addUpdateListener {
+                        this@animateDrop.scaleY = it.animatedValue as Float
+                        this@animateDrop.scaleX = it.animatedValue as Float
+                    }
+                },
+                ObjectAnimator.ofFloat(this@animateDrop, View.TRANSLATION_Y, 0F, translationY).apply {
+                    duration = 620
+                },
+                ObjectAnimator.ofFloat(this@animateDrop, View.TRANSLATION_Y, translationY, translationY - resources.displayMetrics.density * bounceHeight).apply {
+                    duration = 180
+                },
+                ObjectAnimator.ofFloat(this@animateDrop, View.TRANSLATION_Y, translationY - resources.displayMetrics.density * bounceHeight, translationY).apply {
+                    duration = 160
+                },
+                ObjectAnimator.ofFloat(this@animateDrop, View.TRANSLATION_Y, translationY, translationY - resources.displayMetrics.density * bounceHeight / 2F).apply {
+                    duration = 90
+                },
+                ObjectAnimator.ofFloat(this@animateDrop, View.TRANSLATION_Y, translationY - resources.displayMetrics.density * bounceHeight / 2F, translationY).apply {
+                    duration = 80
+                }
+            )
+            this.doOnEnd {
+                endAction()
+                AnimatorSet().apply {
+                    this.duration = 270
+                    this.playTogether(
+                        ObjectAnimator.ofFloat(this@animateDrop, View.ALPHA, 0F, 1F),
+                        ObjectAnimator.ofFloat(this@animateDrop, View.TRANSLATION_Y, this@animateDrop.translationY, 0F),
+                        ValueAnimator.ofFloat(0F, 0.3F).apply {
+                            this.addUpdateListener {
+                                this@animateDrop.scaleY = it.animatedValue as Float
+                                this@animateDrop.scaleX = it.animatedValue as Float
+                            }
+                        }
+                    )
+                    this.start()
+                }
+            }
+            start()
         }
     }
 }

@@ -14,11 +14,13 @@ import com.lilchill.tbgiawo.view.fragments.MenuFragment
 import com.tencent.mmkv.MMKV
 
 //splash
-//settings
-//preferred colors (generation)
-//falling animation (translationY end point should be calculated in GameField class by finding first untaken + margin)
+//settings and settings animation
+//dialog animation
 //match checker
-//arrows (game style(ask Lera))
+//correct drawables with flare and stroke
+//nice colors for dialog and game elements colors
+//colors to GameColors
+//win toast + konfetti
 class AppActivity : AppCompatActivity() {
     val storage: MMKV by lazy { MMKV.defaultMMKV(MMKV.SINGLE_PROCESS_MODE, AppKeys.MMKV_ENCRYPT_KEY) }
     override fun onCreate(savedInstanceState: Bundle?) {

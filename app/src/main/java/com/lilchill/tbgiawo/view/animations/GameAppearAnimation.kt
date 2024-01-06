@@ -12,35 +12,6 @@ import java.util.Random
 object GameAppearAnimation {
     fun GameLayout.animateAppearing(){
         val view = gameField.parent as MaterialCardView
-        if ((0..1000).random() % 2 == 0){
-            view.translationY = if ((0..1000).random() % 2 == 0){
-                view.bottom.toFloat()
-            } else {
-                -view.bottom.toFloat()
-            }
-            pointer.translationX = if (Random().nextBoolean()){
-                (view.resources.displayMetrics.widthPixels / 2 + pointer.width / 2).toFloat()
-            } else {
-                -(view.resources.displayMetrics.widthPixels / 2 + pointer.width / 2).toFloat()
-            }
-        } else {
-            view.translationX = if ((0..1000).random() % 2 == 0){
-                view.right.toFloat()
-            } else {
-                -view.right.toFloat()
-            }
-            pointer.translationY = if (Random().nextBoolean()){
-                (view.resources.displayMetrics.heightPixels / 2 + pointer.height / 2).toFloat()
-            } else {
-                -(view.resources.displayMetrics.heightPixels / 2 + pointer.height / 2).toFloat()
-            }
-        }
-        pointer.alpha = 0F
-        pointer.scaleX = 0F
-        pointer.scaleY = 0F
-        view.alpha = 0F
-        view.scaleX = 0F
-        view.scaleY = 0F
         AnimatorSet().apply {
             duration = 580
             playTogether(

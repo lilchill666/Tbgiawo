@@ -27,4 +27,25 @@ class OnlineGamePresenterImpl(
     override fun onRightClicked() {
         fragment.movePointerRight()
     }
+
+    override fun onClickCompleted() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClickInterrupted() {
+        TODO("Not yet implemented")
+    }
+
+    override fun getFirstColor(): Int {
+        TODO("Not yet implemented")
+    }
+
+    override fun setFirstPlayerAndColors(
+        firstPlayer: Int,
+        color1: Int,
+        color2: Int,
+        dismissAction: () -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
 }
