@@ -148,13 +148,13 @@ class GameFragment : Fragment(), GameViewInterface {
     }
 
     override fun dropPlayerOneElement(playerTwoColor : Int) {
-        layout.pointer.dropElement(1, playerTwoColor, layout.gameField, {presenter.onClickInterrupted()}) {
+        layout.pointer.dropElement(presenter, 1, layout.gameField) {
             presenter.onClickCompleted()
         }
     }
 
     override fun dropPlayerTwoElement(playerOneColor : Int) {
-        layout.pointer.dropElement(2, playerOneColor, layout.gameField, {presenter.onClickInterrupted()}) {
+        layout.pointer.dropElement(presenter, 2, layout.gameField) {
             presenter.onClickCompleted()
         }
     }
