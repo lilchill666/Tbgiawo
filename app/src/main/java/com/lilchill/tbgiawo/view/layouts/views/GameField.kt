@@ -1,29 +1,19 @@
 package com.lilchill.tbgiawo.view.layouts.views
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.SweepGradient
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.lifecycle.lifecycleScope
-import com.google.android.material.card.MaterialCardView
-import com.lilchill.tbgiawo.R
+import com.lilchill.tbgiawo.constants.AppColors
 import com.lilchill.tbgiawo.model.data.GameCellState
 import com.lilchill.tbgiawo.model.data.entities.GameCell
-import com.lilchill.tbgiawo.view.AppActivity
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 
@@ -52,9 +42,9 @@ class GameField(context: Context) : FrameLayout(context) {
             View(context).apply {
                 background = object : GradientDrawable() {
                     private val colors = intArrayOf(
-                        Color.parseColor("#7BB7F3"),
-                        Color.parseColor("#000B2D"),
-                        Color.parseColor("#7BB7F3")
+                        AppColors.gameFieldRingGradientColorOne,
+                        AppColors.gameFieldRingGradientColorTwo,
+                        AppColors.gameFieldRingGradientColorOne
                     )
                     private val ringThickness = context.resources.displayMetrics.density * 3.2F
                     private val positions get() = floatArrayOf(0f, Random.nextDouble(0.5, 0.8).toFloat(), 1f)
@@ -64,7 +54,7 @@ class GameField(context: Context) : FrameLayout(context) {
                     }
                     private val radius = diameter / 2f
                     private val backgroundPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                        color = Color.parseColor("#002AE0")
+                        color = AppColors.gameFieldBackground
                     }
                     private val clearPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                         xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)

@@ -5,4 +5,8 @@ interface GameViewInterface {
     fun dropPlayerTwoElement(playerOneColor : Int)
     fun movePointerLeft()
     fun movePointerRight()
+
+    fun onTie()
+    fun onPlayerOneWin()
+    fun onPlayerTwoWin()
 }

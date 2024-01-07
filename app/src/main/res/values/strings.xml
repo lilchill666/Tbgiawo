@@ -11,4 +11,6 @@
     <string name="firstPlayerOption">Player 1</string>
     <string name="secondPlayerOption">Player 2</string>
     <string name="randomPlayerOption">Random</string>
+    <string name="toastText">Player %1$d won!</string>
+    <string name="toastTie">Tie!</string>
 </resources>

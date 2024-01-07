@@ -2,7 +2,6 @@ package com.lilchill.tbgiawo.view.fragments
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
@@ -17,19 +16,18 @@ import androidx.lifecycle.Lifecycle
 import com.google.android.material.card.MaterialCardView
 import com.lilchill.tbgiawo.R
 import com.lilchill.tbgiawo.constants.AppKeys
+import com.lilchill.tbgiawo.constants.AppColors
+import com.lilchill.tbgiawo.model.data.GameResult
 import com.lilchill.tbgiawo.presenter.implementations.game.LocalGamePresenterImpl
 import com.lilchill.tbgiawo.presenter.implementations.game.OnlineGamePresenterImpl
 import com.lilchill.tbgiawo.view.AppActivity
+import com.lilchill.tbgiawo.view.animations.DialogAppearAnimation
 import com.lilchill.tbgiawo.view.animations.GameAppearAnimation
 import com.lilchill.tbgiawo.view.interfaces.GameViewInterface
 import com.lilchill.tbgiawo.view.layouts.GameLayout
 import com.lilchill.tbgiawo.view.layouts.GameStartDialogLayout
-import nl.dionsegijn.konfetti.core.Party
-import nl.dionsegijn.konfetti.core.Position
-import nl.dionsegijn.konfetti.core.emitter.Emitter
 import java.lang.Exception
 import java.util.Random
-import java.util.concurrent.TimeUnit
 
 class GameFragment : Fragment(), GameViewInterface {
     private val presenter by lazy {
@@ -87,6 +85,7 @@ class GameFragment : Fragment(), GameViewInterface {
                     layout.pointer.alpha = 0F
                     layout.pointer.scaleX = 0F
                     layout.pointer.scaleY = 0F
+                    layout.toast.translationY = layout.toast.top.toFloat()
                     v.alpha = 0F
                     v.scaleX = 0F
                     v.scaleY = 0F
@@ -95,7 +94,7 @@ class GameFragment : Fragment(), GameViewInterface {
                         val dialogView = GameStartDialogLayout(requireContext())
                         dialog.setCanceledOnTouchOutside(false)
                         dialog.setContentView(dialogView)
-                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        dialog.window?.setBackgroundDrawable(ColorDrawable(AppColors.transparent))
                         dialog.setOnDismissListener {
                             presenter.setFirstPlayerAndColors(
                                 when (dialogView.chosenFirstPlayer.value){
@@ -104,8 +103,8 @@ class GameFragment : Fragment(), GameViewInterface {
                                     2 -> (1..2).random()
                                     else -> (1..2).random()
                                 },
-                                dialogView.playerOneColor.value ?: Color.RED,
-                                dialogView.playerTwoColor.value ?: Color.BLACK
+                                dialogView.playerOneColor.value ?: AppColors.basePlayerOneColor,
+                                dialogView.playerTwoColor.value ?: AppColors.basePlayerTwoColor
                             ) {
                                 layout.pointer.updateDrawable(presenter.getFirstColor())
                                 with(GameAppearAnimation){
@@ -120,6 +119,16 @@ class GameFragment : Fragment(), GameViewInterface {
                             dialog.cancel()
                         }
                         dialog.show()
+                        dialogView.viewTreeObserver.addOnGlobalLayoutListener(
+                            object : ViewTreeObserver.OnGlobalLayoutListener{
+                                override fun onGlobalLayout() {
+                                    dialogView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                                    with(DialogAppearAnimation){
+                                        dialogView.animateAppearing()
+                                    }
+                                }
+                            }
+                        )
                     }
                 }
             }
@@ -149,13 +158,13 @@ class GameFragment : Fragment(), GameViewInterface {
 
     override fun dropPlayerOneElement(playerTwoColor : Int) {
         layout.pointer.dropElement(presenter, 1, layout.gameField) {
-            presenter.onClickCompleted()
+            presenter.onClickCompleted(layout.gameField)
         }
     }
 
     override fun dropPlayerTwoElement(playerOneColor : Int) {
         layout.pointer.dropElement(presenter, 2, layout.gameField) {
-            presenter.onClickCompleted()
+            presenter.onClickCompleted(layout.gameField)
         }
     }
 
@@ -165,5 +174,20 @@ class GameFragment : Fragment(), GameViewInterface {
 
     override fun movePointerRight() {
         layout.pointer.moveRight()
+    }
+
+    override fun onTie() {
+        Log.d("LILCHILL", "Tie")
+        presenter.resetField(layout, GameResult.None)
+    }
+
+    override fun onPlayerOneWin() {
+        Log.d("LILCHILL", "Player 1 won")
+        presenter.resetField(layout, GameResult.Player)
+    }
+
+    override fun onPlayerTwoWin() {
+        Log.d("LILCHILL", "Player 2 won")
+        presenter.resetField(layout, GameResult.Opponent)
     }
 }

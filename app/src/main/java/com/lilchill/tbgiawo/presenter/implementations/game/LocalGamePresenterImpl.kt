@@ -1,14 +1,19 @@
 package com.lilchill.tbgiawo.presenter.implementations.game
 
-import android.util.Log
+import androidx.lifecycle.lifecycleScope
 import com.lilchill.tbgiawo.model.data.GameCellState
+import com.lilchill.tbgiawo.model.data.GameResult
 import com.lilchill.tbgiawo.model.game.LocalGameModel
 import com.lilchill.tbgiawo.presenter.GamePresenter
+import com.lilchill.tbgiawo.view.AppActivity
+import com.lilchill.tbgiawo.view.animations.game.GameFieldResetAnimation
+import com.lilchill.tbgiawo.view.animations.game.GameToastAnimation
 import com.lilchill.tbgiawo.view.animations.game.PointerAnimation
-import com.lilchill.tbgiawo.view.animations.game.PointerAnimation.animateDrop
 import com.lilchill.tbgiawo.view.interfaces.GameViewInterface
+import com.lilchill.tbgiawo.view.layouts.GameLayout
 import com.lilchill.tbgiawo.view.layouts.views.GameField
 import com.lilchill.tbgiawo.view.layouts.views.GamePointer
+import kotlinx.coroutines.launch
 
 class LocalGamePresenterImpl(
     private val fragment: GameViewInterface
@@ -23,18 +28,6 @@ class LocalGamePresenterImpl(
         }
     }
 
-    override fun onPlayerOneWin() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onPlayerTwoWin() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onTie() {
-        TODO("Not yet implemented")
-    }
-
     override fun onLeftClicked() {
         if (localGameModel.fieldCanBeClicked){
             fragment.movePointerLeft()
@@ -47,10 +40,57 @@ class LocalGamePresenterImpl(
         }
     }
 
-    override fun onClickCompleted() {
-        //match check
-        localGameModel.fieldCanBeClicked = true
-        localGameModel.currentPlayer = if (localGameModel.currentPlayer == 1) 2 else 1
+    override fun resetField(layout: GameLayout, gameResult: GameResult) {
+        (layout.context as AppActivity).supportFragmentManager.fragments.last().lifecycleScope.launch {
+            layout.playRandomConfetti()
+            with(GameFieldResetAnimation){
+                layout.gameField.resetTheField{
+                    layout.gameField.cells.forEach {
+                        it.forEach{ gameCell ->
+                            gameCell.imageView.setImageDrawable(null)
+                            gameCell.imageView.translationY = 0F
+                            gameCell.imageView.alpha = 1F
+                        }
+                    }
+                }
+            }
+            with(GameToastAnimation){
+                layout.toast.animateAppearing(gameResult){
+                    localGameModel.fieldCanBeClicked = true
+                }
+            }
+            when (gameResult){
+                GameResult.None -> localGameModel.currentPlayer = if (localGameModel.currentPlayer == 1) 2 else 1
+                GameResult.Player -> localGameModel.currentPlayer = 1
+                GameResult.Opponent -> localGameModel.currentPlayer = 2
+            }
+            layout.pointer.updateDrawable(
+                if (localGameModel.currentPlayer == 1){
+                    localGameModel.playerOneColor
+                } else {
+                    localGameModel.playerTwoColor
+                }
+            )
+        }
+    }
+
+    override fun onClickCompleted(gameField : GameField) {
+        when (localGameModel.matchChecker.checkForMatches(gameField.cells)){
+            GameResult.Player -> {
+                fragment.onPlayerOneWin()
+            }
+            GameResult.Opponent -> {
+                fragment.onPlayerTwoWin()
+            }
+            GameResult.None -> {
+                if (gameField.cells.all { it.none { cell -> cell.state == GameCellState.Empty  } }){
+                    fragment.onTie()
+                } else {
+                    localGameModel.fieldCanBeClicked = true
+                    localGameModel.currentPlayer = if (localGameModel.currentPlayer == 1) 2 else 1
+                }
+            }
+        }
     }
 
     override fun onClickInterrupted() {

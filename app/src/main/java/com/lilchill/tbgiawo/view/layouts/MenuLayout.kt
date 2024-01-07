@@ -1,14 +1,13 @@
 package com.lilchill.tbgiawo.view.layouts
 
 import android.content.Context
-import android.graphics.Color
-import android.util.Log
 import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import com.lilchill.tbgiawo.R
+import com.lilchill.tbgiawo.constants.AppColors
 
 class MenuLayout(context: Context) : FrameLayout(context) {
     private val margin = (20F * resources.displayMetrics.density).toInt()
@@ -92,7 +91,7 @@ class MenuLayout(context: Context) : FrameLayout(context) {
                     textSize = 40F
                     gravity = Gravity.CENTER
                     textAlignment = TEXT_ALIGNMENT_CENTER
-                    setTextColor(Color.WHITE)
+                    setTextColor(AppColors.menuButtonTextColor)
                 },
                 LayoutParams(
                     LayoutParams.MATCH_PARENT,
@@ -117,7 +116,7 @@ class MenuLayout(context: Context) : FrameLayout(context) {
                     textSize = 40F
                     gravity = Gravity.CENTER
                     textAlignment = TEXT_ALIGNMENT_CENTER
-                    setTextColor(Color.WHITE)
+                    setTextColor(AppColors.menuButtonTextColor)
                 },
                 LayoutParams(
                     LayoutParams.MATCH_PARENT,
@@ -142,7 +141,7 @@ class MenuLayout(context: Context) : FrameLayout(context) {
                     textSize = 40F
                     gravity = Gravity.CENTER
                     textAlignment = TEXT_ALIGNMENT_CENTER
-                    setTextColor(Color.WHITE)
+                    setTextColor(AppColors.menuButtonTextColor)
                 },
                 LayoutParams(
                     LayoutParams.MATCH_PARENT,
@@ -155,8 +154,8 @@ class MenuLayout(context: Context) : FrameLayout(context) {
         wins.gravity = Gravity.CENTER
         wins.textAlignment = TEXT_ALIGNMENT_CENTER
         wins.textSize = 50F
-        wins.setTextColor(Color.WHITE)
+        wins.setTextColor(AppColors.menuWinsColor)
         wins.typeface = resources.getFont(R.font.luckiest_guy)
-        wins.setShadowLayer(15F, 5F, 5F, Color.BLACK)
+        wins.setShadowLayer(15F, 5F, 5F, AppColors.menuWinsShadow)
     }
 }

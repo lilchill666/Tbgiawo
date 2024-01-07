@@ -1,10 +1,12 @@
 package com.lilchill.tbgiawo.model.game
 
-import android.graphics.Color
+import com.lilchill.tbgiawo.constants.AppColors
+import com.lilchill.tbgiawo.model.data.MatchChecker
 
 class LocalGameModel {
-    var playerOneColor = Color.RED
-    var playerTwoColor = Color.BLACK
+    val matchChecker = MatchChecker()
+    var playerOneColor = AppColors.basePlayerOneColor
+    var playerTwoColor = AppColors.basePlayerTwoColor
     var currentPlayer = -1
     var fieldCanBeClicked = true
 }

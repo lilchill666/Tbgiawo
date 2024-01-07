@@ -3,11 +3,9 @@ package com.lilchill.tbgiawo.view.animations
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.os.Build
 import android.view.View
 import com.google.android.material.card.MaterialCardView
 import com.lilchill.tbgiawo.view.layouts.GameLayout
-import java.util.Random
 
 object GameAppearAnimation {
     fun GameLayout.animateAppearing(){
